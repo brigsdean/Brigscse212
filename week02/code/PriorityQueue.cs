@@ -1,4 +1,4 @@
-﻿public class PriorityQueue
+﻿﻿public class PriorityQueue
 {
     private List<PriorityItem> _queue = new();
 
@@ -24,19 +24,29 @@
 
         // Find the index of the item with the highest priority to remove
         var highPriorityIndex = 0;
-        for (int index = 1; index < _queue.Count - 1; index++)
+        // start the search at the front of the list.
+        // ref:  TestPriorityQueue_Dequeue_Equal_Pri test case
+        //for (int index = 1; index < _queue.Count - 1; index++)
+        // finesh the search at the back of the list.
+        // ref:  TestPriorityQueue_Dequeue_Mixed_Pri test case
+        //for (int index = 0; index < _queue.Count - 1; index++)
+        for (int index = 0; index < _queue.Count; index++)
         {
-            if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
+            // only move the index if the priority is greater in order to find the earliest instance of the highest priority
+            // ref:  TestPriorityQueue_Dequeue_Equal_Pri test case
+            //if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
+            if (_queue[index].Priority > _queue[highPriorityIndex].Priority)
                 highPriorityIndex = index;
         }
 
         // Remove and return the item with the highest priority
         var value = _queue[highPriorityIndex].Value;
+        // changed to remove the item as well
+        // ref:  TestPriorityQueue_Dequeue_Equal_Pri test case
+        _queue.RemoveAt(highPriorityIndex);
         return value;
     }
 
-    // DO NOT MODIFY THE CODE IN THIS METHOD
-    // The graders rely on this method to check if you fixed all the bugs, so changes to it will cause you to lose points.
     public override string ToString()
     {
         return $"[{string.Join(", ", _queue)}]";
@@ -54,8 +64,6 @@ internal class PriorityItem
         Priority = priority;
     }
 
-    // DO NOT MODIFY THE CODE IN THIS METHOD
-    // The graders rely on this method to check if you fixed all the bugs, so changes to it will cause you to lose points.
     public override string ToString()
     {
         return $"{Value} (Pri:{Priority})";
